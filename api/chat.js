@@ -42,9 +42,14 @@ export default async function handler(req, res) {
     
 
     const data = await response.json();
+    if (!data.choices || data.choices.length === 0) {
+      return res.status(500).json({ error: "Sin respuesta del modelo." });
+    }
     const reply=data.choices[0].message;
     history.push(reply);
     res.status(200).json({choices: [reply]});
+    
+    
   } catch (error) {
     console.error("Error en OpenRouter:", error);
     return res.status(500).json({ error: "Error en el servidor" });
