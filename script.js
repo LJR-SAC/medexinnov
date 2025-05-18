@@ -2,15 +2,14 @@ const chatLog = document.getElementById("chat-log");
 const form = document.getElementById("chat-form");
 const userInput = document.getElementById("user-input");
 
-const mensajes = [
-];
+
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const texto = userInput.value.trim();
   if (!texto) return;
 
-  mensajes.push({ role: "user", content: texto });
+
   appendMessage("🧑 Usuario", texto);
   userInput.value = "";
 
@@ -38,7 +37,6 @@ form.addEventListener("submit", async (e) => {
 
     if (data.choices && data.choices.length > 0) {
       const content = data.choices[0].message.content.trim();
-      mensajes.push({ role: "assistant", content });
       appendMessage("👨‍⚕️ MedExpress", content);
     } else {
       appendMessage("❗Error", "La respuesta del servidor fue vacía.");
