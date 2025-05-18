@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   if (!global.sessions) {
-    global.sessions = new Map(): 
+    global.sessions = new Map(); 
   }
   if (!global.sessions.has(sessionId)){
     global.sessions.set(sessionId, [
@@ -21,12 +21,12 @@ export default async function handler(req, res) {
       ]);
   }
 
-  const history = sessions.get(sessionId);
+  const history = global.sessions.get(sessionId);
   history.push({ role: "user", content: message });
 
 
   try {
-    const completion = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: "deepseek/deepseek-chat-v3-0324:free",
-        messages: chatHistory,
+        messages: history,
         temperature: 0.7
       
       })
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     const reply=data.choices[0].message;
-    chat.History.push(reply);
+    history.push(reply);
     res.status(200).json({choices: [reply]});
   } catch (error) {
     console.error("Error en OpenRouter:", error);
