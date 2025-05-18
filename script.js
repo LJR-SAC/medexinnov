@@ -12,6 +12,8 @@ form.addEventListener("submit", async (e) => {
 
   appendMessage("🧑 Usuario", texto);
   userInput.value = "";
+  const existing = document.getElementById("loading-message");
+  if (existing) existing.remove();
 
   const loadingDiv = document.createElement("div");
   loadingDiv.classList.add("message");
